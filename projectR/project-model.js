@@ -16,6 +16,7 @@ module.exports = {
     removeResourcefromProj,
     removeResource,
     update,
+    updateTask,
 }
 
 //implementation details
@@ -125,6 +126,12 @@ function removeResourcefromProj(id) {
       .then(count => (count > 0 ? get(id) : null));
   }
 
+  function updateTask(id, changes) {
+    return db('tasks')
+      .where('id', id)
+      .update(changes)
+      .then((count) => (count > 0 ? get(id) : null));
+  }
 
 
 

@@ -250,5 +250,24 @@ router.get('/:id', (req, res) => {
     });
   })
 
+  router.put('/tasks/:id', (req, res) =>  {
+    const changes = req.body;
+    Projects.updateTask(req.params.id,changes)
+    .then(() => {
+      if (!changes.description) {
+        res.status(400).json({ errorMessage: "Missing Data" });
+      } else {
+        res.status(200).json({ message: `Project updated.` });
+      }
+    })
+    .catch(error => {
+      // log error to server
+      console.log(error);
+      res.status(500).json({
+        message: 'Error updating the project',
+      });
+    });
+  })
+
 
 module.exports = router;
