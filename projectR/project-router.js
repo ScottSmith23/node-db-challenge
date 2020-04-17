@@ -12,7 +12,27 @@ router.get('/', (req, res) => {
     });
   });
 
-  router.get('/:id', (req, res) => {
+router.get('/resources', (req, res) => {
+    Projects.findResources()
+    .then(resources => {
+      res.json(resources);
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'Failed to get resources' });
+    });
+  });
+  
+router.get('/tasks', (req, res) => {
+    Projects.findTasks()
+    .then(tasks => {
+      res.json(tasks);
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'Failed to get tasks' });
+    });
+  });
+
+router.get('/:id', (req, res) => {
     const { id } = req.params;
   
     Projects.get(id)
@@ -24,7 +44,23 @@ router.get('/', (req, res) => {
       }
     })
     .catch(err => {
-      res.status(500).json({ message: 'Failed to get recipe' });
+      res.status(500).json({ message: 'Failed to get project' });
+    });
+  });
+
+  router.get('/:id/tasks', (req, res) => {
+    const { id } = req.params;
+  
+    Projects.getProjectTasks(id)
+    .then(list => {
+      if (list) {
+        res.json(list);
+      } else {
+        res.status(404).json({ message: 'Could not find tasks for given project id.' })
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'Failed to get task list' });
     });
   });
 
