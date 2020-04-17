@@ -5,7 +5,17 @@ module.exports = {
     findResources,
     findTasks,
     getProjectTasks,
-    getProjectResources
+    getProjectResources,
+    getAllProjectResources,
+    insert,
+    insertTask,
+    insertResource,
+    addResource,
+    remove,
+    removeTask,
+    removeResourcefromProj,
+    removeResource,
+    update,
 }
 
 //implementation details
@@ -52,6 +62,10 @@ function getProjectResources(Id) {
       .then(resources => resources.map(resource => mapper.resourceToBody(resource)));
   }
 
+  function getAllProjectResources() {
+    return db("project_resources");
+  }
+
 function findTasks() {
     return db("tasks as t")
         .join('projects as p','p.id','t.project_id')
@@ -61,6 +75,57 @@ function findTasks() {
 function findResources() {
     return db("resources");
 }
+
+function insert(project) {
+    return db("projects")
+      .insert(project, "id")
+      .then(([id]) => get(id));
+  }
+
+function insertTask(task) {
+    return db('tasks')
+      .insert(task, 'id')
+      .then(([id]) => get(id));
+  }
+
+function insertResource(resource) {
+    return db('project_resources')
+      .insert(resource, 'id')
+      .then(([id]) => get(id));
+  }
+
+function addResource(resource) {
+    return db('resources')
+      .insert(resource, 'id')
+      .then(([id]) => get(id));
+  }
+
+function remove(id) {
+    return db("projects")
+      .where("id", id)
+      .del();
+  }
+
+function removeTask(id) {
+    return db('tasks').where('id', id).del();
+  }
+
+function removeResourcefromProj(id) {
+    return db('project_resources').where('id', id).del();
+  }
+  
+  function removeResource(id) {
+    return db('resources').where('id', id).del();
+  }
+
+  function update(id, changes) {
+    return db("projects")
+      .where("id", id)
+      .update(changes)
+      .then(count => (count > 0 ? get(id) : null));
+  }
+
+
 
 
 
