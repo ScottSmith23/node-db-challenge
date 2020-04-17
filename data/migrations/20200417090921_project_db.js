@@ -6,21 +6,23 @@ exports.up = function (knex) {
             tbl.increments("id").primary();
   
           tbl.string("ProjectName", 255).notNullable().unique();
+          tbl.text("Description");
+          tbl.boolean("completed").notNullable().defaultTo(false);
         })
   
         // resources
         .createTable("resources", tbl => {
             tbl.increments("id").primary();
-  
-          tbl.string("ResourceName", 255).notNullable().index();
+            tbl.string("ResourceName", 255).notNullable().index();
+            tbl.text("Description");
         })
   
         // tasks
         .createTable("tasks", tbl => {
          tbl.increments("id").primary();
-  
-          tbl.string("instruction", 255).notNullable().index();
-          tbl.decimal("task_number").notNullable().index();
+         tbl.string("Description", 255).notNullable();
+         tbl.text("Notes");
+          tbl.boolean("completed").notNullable().defaultTo(false);
           // foreign key
           tbl
             .int("project_id")
@@ -34,8 +36,6 @@ exports.up = function (knex) {
         // Project_Resources
         .createTable("project_resources", tbl => {
           tbl.increments("id").primary();
-  
-          tbl.decimal("quantity").notNullable();
   
           tbl
             .int("project_id")
